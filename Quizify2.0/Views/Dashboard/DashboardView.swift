@@ -2064,22 +2064,22 @@ struct ClassProgressRow: View {
 }
 
 // A custom button style to replicate the outline effect from the original design.
-struct OutlineButtonStyle: ButtonStyle {
-    var color: Color
-
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .foregroundColor(color)
-            .background(Color.clear)
-            .cornerRadius(8)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(color, lineWidth: 1.5)
-            )
-            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
-            .opacity(configuration.isPressed ? 0.8 : 1.0)
-    }
-}
+//struct OutlineButtonStyle: ButtonStyle {
+//    var color: Color
+//
+//    func makeBody(configuration: Configuration) -> some View {
+//        configuration.label
+//            .foregroundColor(color)
+//            .background(Color.clear)
+//            .cornerRadius(8)
+//            .overlay(
+//                RoundedRectangle(cornerRadius: 8)
+//                    .stroke(color, lineWidth: 1.5)
+//            )
+//            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
+//            .opacity(configuration.isPressed ? 0.8 : 1.0)
+//    }
+//}
 
 // MARK: - Preview
 struct DashboardView_Previews: PreviewProvider {

@@ -2201,6 +2201,953 @@
 
 
 
+// The final boss
+
+//import SwiftUI
+//
+//// The TestsView allows a student to see all their assigned tests,
+//// categorized by status. It serves as the main hub for test management.
+//struct TestsView: View {
+//    @StateObject private var viewModel = StudentTestsViewModel()
+//    @State private var selectedTab: TestTab = .upcoming
+//    @State private var testToConfirm: Test? = nil
+//    @State private var isTestActive = false
+//
+//    var body: some View {
+//        ZStack {
+//            // Main content of the page, using the exact layout you provided.
+//            ScrollView {
+//                VStack(alignment: .leading, spacing: 25) {
+//                    // MARK: - Header
+//                    VStack(alignment: .leading) {
+//                        Text("My Tests")
+//                            .font(.system(size: 28, weight: .bold))
+//                        Text("View and manage all your tests.")
+//                            .font(.title3)
+//                            .foregroundColor(.quizifyTextGray)
+//                    }
+//
+//                    // MARK: - Custom Tab View
+//                    HStack {
+//                        Spacer()
+//                        HStack(spacing: 0) {
+//                            ForEach(TestTab.allCases) { tab in
+//                                TabButton(tab: tab, selectedTab: $selectedTab)
+//                            }
+//                        }
+//                        .background(Color.quizifyPrimary.opacity(0.1))
+//                        .cornerRadius(8)
+//                        .frame(maxWidth: 600)
+//                        Spacer()
+//                    }
+//
+//                    // MARK: - Tests Grid
+//                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 400), spacing: 25)], spacing: 25) {
+//                        let tests = currentTests()
+//                        if tests.isEmpty {
+//                            // Placeholder for empty tabs
+//                            VStack(spacing: 10) {
+//                                Image(systemName: "doc.text.magnifyingglass")
+//                                    .font(.largeTitle)
+//                                    .foregroundColor(.gray.opacity(0.5))
+//                                Text("No tests in this category.")
+//                                    .foregroundColor(.gray)
+//                                    .font(.headline)
+//                            }
+//                            .frame(maxWidth: .infinity, minHeight: 200)
+//                            .background(Color.gray.opacity(0.05))
+//                            .cornerRadius(16)
+//                            .overlay(
+//                                RoundedRectangle(cornerRadius: 16)
+//                                    .stroke(style: StrokeStyle(lineWidth: 2, dash: [5]))
+//                                    .foregroundColor(.gray.opacity(0.2))
+//                            )
+//                        } else {
+//                            ForEach(tests) { test in
+//                                StudentTestCardView(test: test, onTakeTest: {
+//                                    testToConfirm = test
+//                                })
+//                            }
+//                        }
+//                    }
+//                }
+//                .padding(30)
+//            }
+//            
+//            // MARK: - Confirmation Dialog & Full Screen Test View
+//            // This logic is added on top of your provided code to handle the new test-taking flow.
+//            if let test = testToConfirm {
+//                Color.black.opacity(0.4).edgesIgnoringSafeArea(.all)
+//                
+//                StartTestConfirmationView(
+//                    test: test,
+//                    onStart: {
+//                        isTestActive = true
+//                    },
+//                    onCancel: { testToConfirm = nil }
+//                )
+//                .transition(.move(edge: .bottom).combined(with: .opacity))
+//            }
+//            
+//            if isTestActive, let test = testToConfirm {
+//                AttemptTestView(testId: test.id, onFinish: {
+//                    isTestActive = false
+//                    testToConfirm = nil
+//                })
+//                .transition(.scale)
+//            }
+//        }
+//        .animation(.spring(), value: testToConfirm)
+//        .animation(.spring(), value: isTestActive)
+//    }
+//    
+//    // Corrected to return [StudentTest] to match the ViewModel
+//    private func currentTests() -> [Test] {
+//        switch selectedTab {
+//        case .upcoming: return viewModel.upcomingTests
+//        case .completed: return viewModel.completedTests
+//        case .missed: return viewModel.missedTests
+//        case .all: return viewModel.upcomingTests + viewModel.completedTests + viewModel.missedTests
+//        }
+//    }
+//}
+//
+//// Enum for the test categories, now with associated colors for the tabs.
+//enum TestTab: String, CaseIterable, Identifiable {
+//    case upcoming = "Upcoming"
+//    case completed = "Completed"
+//    case missed = "Missed"
+//    case all = "All Tests"
+//    var id: String { self.rawValue }
+//    
+//    var activeColor: Color {
+//        switch self {
+//        case .upcoming: return .quizifyPrimary
+//        case .completed: return .quizifyAccentGreen
+//        case .missed: return .quizifyRedError
+//        case .all: return .quizifyAccentBlue
+//        }
+//    }
+//}
+//
+//// MARK: - TabButton
+//// A dedicated view for the custom tab buttons to keep the main view clean.
+//struct TabButton: View {
+//    let tab: TestTab
+//    @Binding var selectedTab: TestTab
+//    
+//    var body: some View {
+//        Button(action: {
+//            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+//                selectedTab = tab
+//            }
+//        }) {
+//            Text(tab.rawValue)
+//                .font(.headline)
+//                .fontWeight(.semibold)
+//                .padding(.vertical, 12)
+//                .frame(maxWidth: .infinity)
+//                .background(
+//                    ZStack {
+//                        if selectedTab == tab {
+//                            RoundedRectangle(cornerRadius: 8)
+//                                .fill(tab.activeColor)
+//                                .shadow(radius: 3, y: 2)
+//                        }
+//                    }
+//                )
+//                .foregroundColor(selectedTab == tab ? .white : .primary)
+//        }
+//        .buttonStyle(PlainButtonStyle())
+//    }
+//}
+//
+//
+//// MARK: - StudentTestCardView
+//// A card displaying a summary of a student's test, redesigned to be more professional and visually appealing.
+//struct StudentTestCardView: View {
+//    let test: Test // Corrected type
+//    var onTakeTest: () -> Void
+//    
+//    private var statusColor: Color {
+//        switch test.status {
+//        case "Upcoming": return .orange
+//        case "Completed": return .quizifyAccentGreen
+//        case "Missed": return .quizifyRedError
+//        default: return .gray
+//        }
+//    }
+//    
+//    private var buttonColor: Color {
+//        test.status == "Upcoming" ? .quizifyPrimary : .quizifyAccentBlue
+//    }
+//    
+//    private var buttonText: String {
+//        switch test.status {
+//        case "Upcoming": return "Take Test"
+//        case "Completed": return "View Results"
+//        default: return "Missed"
+//        }
+//    }
+//
+//    var body: some View {
+//        VStack(alignment: .leading, spacing: 20) {
+//            // Top section with title and teacher info
+//            VStack(alignment: .leading, spacing: 12) {
+//                VStack(alignment: .leading) {
+//                    Text(test.title).font(.system(size: 22, weight: .bold)).lineLimit(1)
+//                    Text(test.subject).font(.system(size: 17)).foregroundColor(.gray)
+//                }
+//                
+//                HStack {
+//                    AsyncImage(url: URL(string: test.teacherAvatar ?? "")) { phase in
+//                        if let image = phase.image {
+//                            image.resizable().clipShape(Circle())
+//                        } else {
+//                            Image(systemName: "person.crop.circle.fill").resizable()
+//                        }
+//                    }
+//                    .frame(width: 30, height: 30)
+//                    Text(test.teacher).font(.headline).foregroundColor(.quizifyTextGray)
+//                }
+//            }
+//            
+//            // Middle section with the new "+" cross layout
+//            TestDetailsCrossLayout(test: test)
+//            
+//            // Bottom section with status badges and action button
+//            VStack(spacing: 15) {
+//                HStack {
+//                    TestCardBadge(text: test.status, color: statusColor)
+//                    if let score = test.score {
+//                        TestCardBadge(text: "Score: \(score)%", color: .quizifyAccentBlue)
+//                    }
+//                    Spacer()
+//                }
+//                
+//                Button(action: onTakeTest) {
+//                    Label(buttonText, systemImage: "eye.fill")
+//                        .fontWeight(.semibold)
+//                        .frame(maxWidth: .infinity)
+//                        .padding(.vertical, 10)
+//                }
+//                .buttonStyle(OutlineButtonStyle(color: buttonColor))
+//                .disabled(test.status == "Missed")
+//            }
+//        }
+//        .padding(25)
+//        .frame(minHeight: 340)
+//        .background(Color.white)
+//        .cornerRadius(20)
+//        .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: 5)
+//    }
+//}
+//
+//// MARK: - Helper Views
+//// A new helper view for the creative cross layout.
+//fileprivate struct TestDetailsCrossLayout: View {
+//    let test: Test // Corrected type
+//
+//    var body: some View {
+//        ZStack {
+//            // Vertical divider line with a subtle shadow for depth.
+//            Rectangle()
+//                .fill(Color.gray.opacity(0.15))
+//                .frame(width: 1)
+//                .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+//
+//            // Horizontal divider line with a subtle shadow.
+//            Rectangle()
+//                .fill(Color.gray.opacity(0.15))
+//                .frame(height: 1)
+//                .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+//
+//            // Arrange the four info rows in a 2x2 grid structure
+//            // that visually appears to be around the cross.
+//            VStack(spacing: 20) {
+//                HStack(spacing: 20) {
+//                    TestCardInfoRow(icon: "book.closed.fill", text: test.className, color: .quizifyPrimary)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                    TestCardInfoRow(icon: "hourglass", text: test.duration, color: .quizifyAccentYellow)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                }
+//                HStack(spacing: 20) {
+//                    TestCardInfoRow(icon: "calendar", text: test.date, color: .quizifyAccentBlue)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                    TestCardInfoRow(icon: "clock.fill", text: test.time, color: .quizifyAccentGreen)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                }
+//            }
+//        }
+//        .padding()
+//        .background(Color.gray.opacity(0.05))
+//        .cornerRadius(12)
+//    }
+//}
+//
+//fileprivate struct TestCardInfoRow: View {
+//    let icon: String
+//    let text: String
+//    let color: Color
+//
+//    var body: some View {
+//        HStack {
+//            Image(systemName: icon)
+//                .font(.headline)
+//                .foregroundColor(color)
+//                .frame(width: 20)
+//            Text(text)
+//                .font(.headline)
+//                .fontWeight(.medium)
+//                .foregroundColor(.quizifyTextGray)
+//            Spacer()
+//        }
+//    }
+//}
+//
+//fileprivate struct TestCardBadge: View {
+//    let text: String
+//    let color: Color
+//    
+//    var body: some View {
+//        Text(text)
+//            .font(.subheadline)
+//            .fontWeight(.medium)
+//            .padding(.horizontal, 12)
+//            .padding(.vertical, 5)
+//            .background(color.opacity(0.15))
+//            .foregroundColor(color)
+//            .cornerRadius(15)
+//    }
+//}
+
+
+// a good version with a glass confirmation dialog (but it's still gray)
+//
+//import SwiftUI
+//
+//// The TestsView allows a student to see all their assigned tests,
+//// categorized by status. It serves as the main hub for test management.
+//struct TestsView: View {
+//    @StateObject private var viewModel = StudentTestsViewModel()
+//    @State private var selectedTab: TestTab = .upcoming
+//    @State private var testToConfirm: Test? = nil
+//    @State private var isTestActive = false
+//
+//    var body: some View {
+//        ZStack {
+//            // Main content of the page.
+//            ScrollView {
+//                VStack(alignment: .leading, spacing: 25) {
+//                    // MARK: - Header
+//                    VStack(alignment: .leading) {
+//                        Text("My Tests")
+//                            .font(.system(size: 28, weight: .bold))
+//                        Text("View and manage all your tests.")
+//                            .font(.title3)
+//                            .foregroundColor(.quizifyTextGray)
+//                    }
+//
+//                    // MARK: - Custom Tab View
+//                    HStack {
+//                        Spacer()
+//                        HStack(spacing: 0) {
+//                            ForEach(TestTab.allCases) { tab in
+//                                TabButton(tab: tab, selectedTab: $selectedTab)
+//                            }
+//                        }
+//                        .background(Color.quizifyPrimary.opacity(0.1))
+//                        .cornerRadius(8)
+//                        .frame(maxWidth: 600)
+//                        Spacer()
+//                    }
+//
+//                    // MARK: - Tests Grid
+//                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 400), spacing: 25)], spacing: 25) {
+//                        let tests = currentTests()
+//                        if tests.isEmpty {
+//                            // Placeholder for empty tabs
+//                            VStack(spacing: 10) {
+//                                Image(systemName: "doc.text.magnifyingglass")
+//                                    .font(.largeTitle)
+//                                    .foregroundColor(.gray.opacity(0.5))
+//                                Text("No tests in this category.")
+//                                    .foregroundColor(.gray)
+//                                    .font(.headline)
+//                            }
+//                            .frame(maxWidth: .infinity, minHeight: 200)
+//                            .background(Color.gray.opacity(0.05))
+//                            .cornerRadius(16)
+//                            .overlay(
+//                                RoundedRectangle(cornerRadius: 16)
+//                                    .stroke(style: StrokeStyle(lineWidth: 2, dash: [5]))
+//                                    .foregroundColor(.gray.opacity(0.2))
+//                            )
+//                        } else {
+//                            ForEach(tests) { test in
+//                                StudentTestCardView(test: test, onTakeTest: {
+//                                    testToConfirm = test
+//                                })
+//                            }
+//                        }
+//                    }
+//                }
+//                .padding(30)
+//            }
+//            
+//            // MARK: - Confirmation Dialog & Full Screen Test View
+//            // A semi-transparent overlay that appears with the dialog.
+//            if testToConfirm != nil {
+//                Color.black.opacity(0.5).edgesIgnoringSafeArea(.all)
+//            }
+//
+//            // The redesigned confirmation dialog.
+//            if let test = testToConfirm {
+//                StartTestConfirmationView(
+//                    test: test,
+//                    onStart: {
+//                        isTestActive = true
+//                    },
+//                    onCancel: { testToConfirm = nil }
+//                )
+//                .transition(.move(edge: .bottom).combined(with: .opacity))
+//            }
+//            
+//            // The full-screen test view that appears after confirmation.
+//            if isTestActive, let test = testToConfirm {
+//                AttemptTestView(testId: test.id, onFinish: {
+//                    isTestActive = false
+//                    testToConfirm = nil
+//                })
+//                .transition(.scale.combined(with: .opacity))
+//            }
+//        }
+//        .animation(.spring(response: 0.4, dampingFraction: 0.8), value: testToConfirm)
+//        .animation(.spring(), value: isTestActive)
+//    }
+//    
+//    private func currentTests() -> [Test] {
+//        switch selectedTab {
+//        case .upcoming: return viewModel.upcomingTests
+//        case .completed: return viewModel.completedTests
+//        case .missed: return viewModel.missedTests
+//        case .all: return viewModel.upcomingTests + viewModel.completedTests + viewModel.missedTests
+//        }
+//    }
+//}
+//
+//// Enum for the test categories, now with associated colors for the tabs.
+//enum TestTab: String, CaseIterable, Identifiable {
+//    case upcoming = "Upcoming"
+//    case completed = "Completed"
+//    case missed = "Missed"
+//    case all = "All Tests"
+//    var id: String { self.rawValue }
+//    
+//    var activeColor: Color {
+//        switch self {
+//        case .upcoming: return .quizifyPrimary
+//        case .completed: return .quizifyAccentGreen
+//        case .missed: return .quizifyRedError
+//        case .all: return .quizifyAccentBlue
+//        }
+//    }
+//}
+//
+//// MARK: - TabButton
+//struct TabButton: View {
+//    let tab: TestTab
+//    @Binding var selectedTab: TestTab
+//    
+//    var body: some View {
+//        Button(action: {
+//            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+//                selectedTab = tab
+//            }
+//        }) {
+//            Text(tab.rawValue)
+//                .font(.headline)
+//                .fontWeight(.semibold)
+//                .padding(.vertical, 12)
+//                .frame(maxWidth: .infinity)
+//                .background(
+//                    ZStack {
+//                        if selectedTab == tab {
+//                            RoundedRectangle(cornerRadius: 8)
+//                                .fill(tab.activeColor)
+//                                .shadow(radius: 3, y: 2)
+//                        }
+//                    }
+//                )
+//                .foregroundColor(selectedTab == tab ? .white : .primary)
+//        }
+//        .buttonStyle(PlainButtonStyle())
+//    }
+//}
+//
+//
+//// MARK: - StudentTestCardView
+//struct StudentTestCardView: View {
+//    let test: Test
+//    var onTakeTest: () -> Void
+//    
+//    private var statusColor: Color {
+//        switch test.status {
+//        case "Upcoming": return .orange
+//        case "Completed": return .quizifyAccentGreen
+//        case "Missed": return .quizifyRedError
+//        default: return .gray
+//        }
+//    }
+//    
+//    private var buttonColor: Color {
+//        test.status == "Upcoming" ? .quizifyPrimary : .quizifyAccentBlue
+//    }
+//    
+//    private var buttonText: String {
+//        switch test.status {
+//        case "Upcoming": return "Take Test"
+//        case "Completed": return "View Results"
+//        default: return "Missed"
+//        }
+//    }
+//
+//    var body: some View {
+//        VStack(alignment: .leading, spacing: 20) {
+//            VStack(alignment: .leading, spacing: 12) {
+//                VStack(alignment: .leading) {
+//                    Text(test.title).font(.system(size: 22, weight: .bold)).lineLimit(1)
+//                    Text(test.subject).font(.system(size: 17)).foregroundColor(.gray)
+//                }
+//                
+//                HStack {
+//                    AsyncImage(url: URL(string: test.teacherAvatar ?? "")) { phase in
+//                        if let image = phase.image {
+//                            image.resizable().clipShape(Circle())
+//                        } else {
+//                            Image(systemName: "person.crop.circle.fill").resizable()
+//                        }
+//                    }
+//                    .frame(width: 30, height: 30)
+//                    Text(test.teacher).font(.headline).foregroundColor(.quizifyTextGray)
+//                }
+//            }
+//            
+//            TestDetailsCrossLayout(test: test)
+//            
+//            VStack(spacing: 15) {
+//                HStack {
+//                    TestCardBadge(text: test.status, color: statusColor)
+//                    if let score = test.score {
+//                        TestCardBadge(text: "Score: \(score)%", color: .quizifyAccentBlue)
+//                    }
+//                    Spacer()
+//                }
+//                
+//                Button(action: onTakeTest) {
+//                    Label(buttonText, systemImage: "eye.fill")
+//                        .fontWeight(.semibold)
+//                        .frame(maxWidth: .infinity)
+//                        .padding(.vertical, 10)
+//                }
+//                .buttonStyle(OutlineButtonStyle(color: buttonColor))
+//                .disabled(test.status == "Missed")
+//            }
+//        }
+//        .padding(25)
+//        .frame(minHeight: 340)
+//        .background(Color.white)
+//        .cornerRadius(20)
+//        .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: 5)
+//    }
+//}
+//
+//// MARK: - Helper Views for Card
+//fileprivate struct TestDetailsCrossLayout: View {
+//    let test: Test
+//
+//    var body: some View {
+//        ZStack {
+//            Rectangle()
+//                .fill(Color.gray.opacity(0.15))
+//                .frame(width: 1)
+//                .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+//
+//            Rectangle()
+//                .fill(Color.gray.opacity(0.15))
+//                .frame(height: 1)
+//                .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+//
+//            VStack(spacing: 20) {
+//                HStack(spacing: 20) {
+//                    TestCardInfoRow(icon: "book.closed.fill", text: test.className, color: .quizifyPrimary)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                    TestCardInfoRow(icon: "hourglass", text: test.duration, color: .quizifyAccentYellow)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                }
+//                HStack(spacing: 20) {
+//                    TestCardInfoRow(icon: "calendar", text: test.date, color: .quizifyAccentBlue)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                    TestCardInfoRow(icon: "number.circle.fill", text: "\(test.questions) Questions", color: .quizifyAccentGreen)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                }
+//            }
+//        }
+//        .padding()
+//        .background(Color.gray.opacity(0.05))
+//        .cornerRadius(12)
+//    }
+//}
+//
+//fileprivate struct TestCardInfoRow: View {
+//    let icon: String
+//    let text: String
+//    let color: Color
+//
+//    var body: some View {
+//        HStack {
+//            Image(systemName: icon)
+//                .font(.headline)
+//                .foregroundColor(color)
+//                .frame(width: 20)
+//            Text(text)
+//                .font(.headline)
+//                .fontWeight(.medium)
+//                .foregroundColor(.quizifyTextGray)
+//            Spacer()
+//        }
+//    }
+//}
+//
+//fileprivate struct TestCardBadge: View {
+//    let text: String
+//    let color: Color
+//    
+//    var body: some View {
+//        Text(text)
+//            .font(.subheadline)
+//            .fontWeight(.medium)
+//            .padding(.horizontal, 12)
+//            .padding(.vertical, 5)
+//            .background(color.opacity(0.15))
+//            .foregroundColor(color)
+//            .cornerRadius(15)
+//    }
+//}
+
+
+// the best version i would say
+
+//import SwiftUI
+//
+//// The TestsView allows a student to see all their assigned tests,
+//// categorized by status. It serves as the main hub for test management.
+//struct TestsView: View {
+//    @StateObject private var viewModel = StudentTestsViewModel()
+//    @State private var selectedTab: TestTab = .upcoming
+//    @State private var testToConfirm: Test? = nil
+//    @State private var isTestActive = false
+//
+//    var body: some View {
+//        ZStack {
+//            // Main content of the page.
+//            ScrollView {
+//                VStack(alignment: .leading, spacing: 25) {
+//                    // MARK: - Header
+//                    VStack(alignment: .leading) {
+//                        Text("My Tests")
+//                            .font(.system(size: 28, weight: .bold))
+//                        Text("View and manage all your tests.")
+//                            .font(.title3)
+//                            .foregroundColor(.quizifyTextGray)
+//                    }
+//
+//                    // MARK: - Custom Tab View
+//                    HStack {
+//                        Spacer()
+//                        HStack(spacing: 0) {
+//                            ForEach(TestTab.allCases) { tab in
+//                                TabButton(tab: tab, selectedTab: $selectedTab)
+//                            }
+//                        }
+//                        .background(Color.quizifyPrimary.opacity(0.1))
+//                        .cornerRadius(8)
+//                        .frame(maxWidth: 600)
+//                        Spacer()
+//                    }
+//
+//                    // MARK: - Tests Grid
+//                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 400), spacing: 25)], spacing: 25) {
+//                        let tests = currentTests()
+//                        if tests.isEmpty {
+//                            // Placeholder for empty tabs
+//                            VStack(spacing: 10) {
+//                                Image(systemName: "doc.text.magnifyingglass")
+//                                    .font(.largeTitle)
+//                                    .foregroundColor(.gray.opacity(0.5))
+//                                Text("No tests in this category.")
+//                                    .foregroundColor(.gray)
+//                                    .font(.headline)
+//                            }
+//                            .frame(maxWidth: .infinity, minHeight: 200)
+//                            .background(Color.gray.opacity(0.05))
+//                            .cornerRadius(16)
+//                            .overlay(
+//                                RoundedRectangle(cornerRadius: 16)
+//                                    .stroke(style: StrokeStyle(lineWidth: 2, dash: [5]))
+//                                    .foregroundColor(.gray.opacity(0.2))
+//                            )
+//                        } else {
+//                            ForEach(tests) { test in
+//                                StudentTestCardView(test: test, onTakeTest: {
+//                                    testToConfirm = test
+//                                })
+//                            }
+//                        }
+//                    }
+//                }
+//                .padding(30)
+//            }
+//            
+//            // MARK: - Confirmation Dialog & Full Screen Test View
+//            // A semi-transparent overlay that appears with the dialog.
+//            if testToConfirm != nil {
+//                Color.black.opacity(0.5).edgesIgnoringSafeArea(.all)
+//            }
+//
+//            // The redesigned confirmation dialog.
+//            if let test = testToConfirm {
+//                StartTestConfirmationView(
+//                    test: test,
+//                    onStart: {
+//                        isTestActive = true
+//                    },
+//                    onCancel: { testToConfirm = nil }
+//                )
+//                .transition(.move(edge: .bottom).combined(with: .opacity))
+//            }
+//            
+//            // The full-screen test view that appears after confirmation.
+//            if isTestActive, let test = testToConfirm {
+//                AttemptTestView(testId: test.id, onFinish: {
+//                    isTestActive = false
+//                    testToConfirm = nil
+//                })
+//                .transition(.scale.combined(with: .opacity))
+//            }
+//        }
+//        .animation(.spring(response: 0.4, dampingFraction: 0.8), value: testToConfirm)
+//        .animation(.spring(), value: isTestActive)
+//    }
+//    
+//    private func currentTests() -> [Test] {
+//        switch selectedTab {
+//        case .upcoming: return viewModel.upcomingTests
+//        case .completed: return viewModel.completedTests
+//        case .missed: return viewModel.missedTests
+//        case .all: return viewModel.upcomingTests + viewModel.completedTests + viewModel.missedTests
+//        }
+//    }
+//}
+//
+//// Enum for the test categories, now with associated colors for the tabs.
+//enum TestTab: String, CaseIterable, Identifiable {
+//    case upcoming = "Upcoming"
+//    case completed = "Completed"
+//    case missed = "Missed"
+//    case all = "All Tests"
+//    var id: String { self.rawValue }
+//    
+//    var activeColor: Color {
+//        switch self {
+//        case .upcoming: return .quizifyPrimary
+//        case .completed: return .quizifyAccentGreen
+//        case .missed: return .quizifyRedError
+//        case .all: return .quizifyAccentBlue
+//        }
+//    }
+//}
+//
+//// MARK: - TabButton
+//struct TabButton: View {
+//    let tab: TestTab
+//    @Binding var selectedTab: TestTab
+//    
+//    var body: some View {
+//        Button(action: {
+//            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+//                selectedTab = tab
+//            }
+//        }) {
+//            Text(tab.rawValue)
+//                .font(.headline)
+//                .fontWeight(.semibold)
+//                .padding(.vertical, 12)
+//                .frame(maxWidth: .infinity)
+//                .background(
+//                    ZStack {
+//                        if selectedTab == tab {
+//                            RoundedRectangle(cornerRadius: 8)
+//                                .fill(tab.activeColor)
+//                                .shadow(radius: 3, y: 2)
+//                        }
+//                    }
+//                )
+//                .foregroundColor(selectedTab == tab ? .white : .primary)
+//        }
+//        .buttonStyle(PlainButtonStyle())
+//    }
+//}
+//
+//
+//// MARK: - StudentTestCardView
+//struct StudentTestCardView: View {
+//    let test: Test
+//    var onTakeTest: () -> Void
+//    
+//    private var statusColor: Color {
+//        switch test.status {
+//        case "Upcoming": return .orange
+//        case "Completed": return .quizifyAccentGreen
+//        case "Missed": return .quizifyRedError
+//        default: return .gray
+//        }
+//    }
+//    
+//    private var buttonColor: Color {
+//        test.status == "Upcoming" ? .quizifyPrimary : .quizifyAccentBlue
+//    }
+//    
+//    private var buttonText: String {
+//        switch test.status {
+//        case "Upcoming": return "Take Test"
+//        case "Completed": return "View Results"
+//        default: return "Missed"
+//        }
+//    }
+//
+//    var body: some View {
+//        VStack(alignment: .leading, spacing: 20) {
+//            VStack(alignment: .leading, spacing: 12) {
+//                VStack(alignment: .leading) {
+//                    Text(test.title).font(.system(size: 22, weight: .bold)).lineLimit(1)
+//                    Text(test.subject).font(.system(size: 17)).foregroundColor(.gray)
+//                }
+//                
+//                HStack {
+//                    AsyncImage(url: URL(string: test.teacherAvatar ?? "")) { phase in
+//                        if let image = phase.image {
+//                            image.resizable().clipShape(Circle())
+//                        } else {
+//                            Image(systemName: "person.crop.circle.fill").resizable()
+//                        }
+//                    }
+//                    .frame(width: 30, height: 30)
+//                    Text(test.teacher).font(.headline).foregroundColor(.quizifyTextGray)
+//                }
+//            }
+//            
+//            TestDetailsCrossLayout(test: test)
+//            
+//            VStack(spacing: 15) {
+//                HStack {
+//                    TestCardBadge(text: test.status, color: statusColor)
+//                    if let score = test.score {
+//                        TestCardBadge(text: "Score: \(score)%", color: .quizifyAccentBlue)
+//                    }
+//                    Spacer()
+//                }
+//                
+//                Button(action: onTakeTest) {
+//                    Label(buttonText, systemImage: "eye.fill")
+//                        .fontWeight(.semibold)
+//                        .frame(maxWidth: .infinity)
+//                        .padding(.vertical, 10)
+//                }
+//                .buttonStyle(OutlineButtonStyle(color: buttonColor))
+//                .disabled(test.status == "Missed")
+//            }
+//        }
+//        .padding(25)
+//        .frame(minHeight: 340)
+//        .background(Color.white)
+//        .cornerRadius(20)
+//        .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: 5)
+//    }
+//}
+//
+//// MARK: - Helper Views for Card
+//fileprivate struct TestDetailsCrossLayout: View {
+//    let test: Test
+//
+//    var body: some View {
+//        ZStack {
+//            Rectangle()
+//                .fill(Color.gray.opacity(0.15))
+//                .frame(width: 1)
+//                .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+//
+//            Rectangle()
+//                .fill(Color.gray.opacity(0.15))
+//                .frame(height: 1)
+//                .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+//
+//            VStack(spacing: 20) {
+//                HStack(spacing: 20) {
+//                    TestCardInfoRow(icon: "book.closed.fill", text: test.className, color: .quizifyPrimary)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                    TestCardInfoRow(icon: "hourglass", text: test.duration, color: .quizifyAccentYellow)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                }
+//                HStack(spacing: 20) {
+//                    TestCardInfoRow(icon: "calendar", text: test.date, color: .quizifyAccentBlue)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                    TestCardInfoRow(icon: "number.circle.fill", text: "\(test.questions) Questions", color: .quizifyAccentGreen)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                }
+//            }
+//        }
+//        .padding()
+//        .background(Color.gray.opacity(0.05))
+//        .cornerRadius(12)
+//    }
+//}
+//
+//fileprivate struct TestCardInfoRow: View {
+//    let icon: String
+//    let text: String
+//    let color: Color
+//
+//    var body: some View {
+//        HStack {
+//            Image(systemName: icon)
+//                .font(.headline)
+//                .foregroundColor(color)
+//                .frame(width: 20)
+//            Text(text)
+//                .font(.headline)
+//                .fontWeight(.medium)
+//                .foregroundColor(.quizifyTextGray)
+//            Spacer()
+//        }
+//    }
+//}
+//
+//fileprivate struct TestCardBadge: View {
+//    let text: String
+//    let color: Color
+//    
+//    var body: some View {
+//        Text(text)
+//            .font(.subheadline)
+//            .fontWeight(.medium)
+//            .padding(.horizontal, 12)
+//            .padding(.vertical, 5)
+//            .background(color.opacity(0.15))
+//            .foregroundColor(color)
+//            .cornerRadius(15)
+//    }
+//}
 
 
 import SwiftUI
@@ -2215,7 +3162,7 @@ struct TestsView: View {
 
     var body: some View {
         ZStack {
-            // Main content of the page, using the exact layout you provided.
+            // Main content of the page.
             ScrollView {
                 VStack(alignment: .leading, spacing: 25) {
                     // MARK: - Header
@@ -2275,10 +3222,13 @@ struct TestsView: View {
             }
             
             // MARK: - Confirmation Dialog & Full Screen Test View
-            // This logic is added on top of your provided code to handle the new test-taking flow.
+            // A semi-transparent overlay that appears with the dialog.
+            if testToConfirm != nil {
+                Color.black.opacity(0.5).edgesIgnoringSafeArea(.all)
+            }
+
+            // The redesigned confirmation dialog.
             if let test = testToConfirm {
-                Color.black.opacity(0.4).edgesIgnoringSafeArea(.all)
-                
                 StartTestConfirmationView(
                     test: test,
                     onStart: {
@@ -2289,19 +3239,19 @@ struct TestsView: View {
                 .transition(.move(edge: .bottom).combined(with: .opacity))
             }
             
+            // The full-screen test view that appears after confirmation.
             if isTestActive, let test = testToConfirm {
                 AttemptTestView(testId: test.id, onFinish: {
                     isTestActive = false
                     testToConfirm = nil
                 })
-                .transition(.scale)
+                .transition(.scale.combined(with: .opacity))
             }
         }
-        .animation(.spring(), value: testToConfirm)
+        .animation(.spring(response: 0.4, dampingFraction: 0.8), value: testToConfirm)
         .animation(.spring(), value: isTestActive)
     }
     
-    // Corrected to return [StudentTest] to match the ViewModel
     private func currentTests() -> [Test] {
         switch selectedTab {
         case .upcoming: return viewModel.upcomingTests
@@ -2330,8 +3280,133 @@ enum TestTab: String, CaseIterable, Identifiable {
     }
 }
 
+// MARK: - Redesigned Confirmation Dialog (Moved here to fix scope issue)
+struct StartTestConfirmationView: View {
+    let test: Test
+    let onStart: () -> Void
+    let onCancel: () -> Void
+
+    var body: some View {
+        VStack(spacing: 25) {
+            // MARK: Icon
+            Image(systemName: "graduationcap.fill")
+                .font(.system(size: 50))
+                .foregroundColor(.white)
+                .padding(20)
+                .background(
+                    Circle()
+                        .fill(Color.quizifyPrimary)
+                        .shadow(color: .quizifyPrimary.opacity(0.6), radius: 15, x: 0, y: 10) // Added glow
+                )
+
+            // MARK: Title and Subtitle
+            VStack(spacing: 8) {
+                Text("Ready to Begin?")
+                    .font(.system(size: 32, weight: .bold))
+                    .foregroundColor(.white)
+                Text(test.title)
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white.opacity(0.8))
+                    .multilineTextAlignment(.center)
+            }
+
+            // MARK: Details Section
+            VStack(spacing: 15) {
+                ConfirmationDetailRow(icon: "book.closed.fill", label: "Subject", value: test.subject, color: .quizifyAccentBlue)
+                ConfirmationDetailRow(icon: "hourglass", label: "Duration", value: test.duration, color: .quizifyAccentYellow)
+                ConfirmationDetailRow(icon: "number.circle.fill", label: "Questions", value: "\(test.questions)", color: .quizifyAccentGreen)
+            }
+            .padding(25)
+            .background(.black.opacity(0.2))
+            .cornerRadius(16)
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(Color.white.opacity(0.2), lineWidth: 1)
+            )
+
+            // MARK: Buttons
+            HStack(spacing: 20) {
+                Button(action: onCancel) {
+                    Text("Cancel")
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                }
+                .buttonStyle(PlainButtonStyle())
+                .foregroundColor(.white.opacity(0.7))
+
+                Button(action: onStart) {
+                    Label("Start Test", systemImage: "arrow.right.circle.fill")
+                        .fontWeight(.bold)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                }
+                .buttonStyle(FilledButtonStyle(color: .quizifyAccentGreen))
+            }
+            .padding(.top, 10)
+        }
+        .padding(40)
+        .background(
+            ZStack {
+                Color.black.opacity(0.45)
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color.quizifyPrimary.opacity(0.5),
+                        Color.quizifyDarkBackground.opacity(0.7)
+                    ]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                RoundedRectangle(cornerRadius: 25)
+                    .stroke(
+                        LinearGradient(
+                            gradient: Gradient(colors: [
+                                Color.white.opacity(0.4),
+                                Color.white.opacity(0.1)
+                            ]),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ),
+                        lineWidth: 1.5
+                    )
+            }
+        )
+        .cornerRadius(25)
+        .shadow(color: .black.opacity(0.3), radius: 30, x: 0, y: 15)
+        .padding(50)
+        .frame(maxWidth: 600)
+    }
+}
+
+// Helper for detail rows in the confirmation dialog
+fileprivate struct ConfirmationDetailRow: View {
+    let icon: String
+    let label: String
+    let value: String
+    let color: Color
+
+    var body: some View {
+        HStack {
+            Image(systemName: icon)
+                .font(.headline)
+                .foregroundColor(color)
+                .shadow(color: color.opacity(0.5), radius: 5) // Icon glow
+                .frame(width: 25)
+            Text(label)
+                .font(.headline)
+                .foregroundColor(.white.opacity(0.7))
+            Spacer()
+            Text(value)
+                .font(.headline)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+        }
+    }
+}
+
+
 // MARK: - TabButton
-// A dedicated view for the custom tab buttons to keep the main view clean.
 struct TabButton: View {
     let tab: TestTab
     @Binding var selectedTab: TestTab
@@ -2364,9 +3439,8 @@ struct TabButton: View {
 
 
 // MARK: - StudentTestCardView
-// A card displaying a summary of a student's test, redesigned to be more professional and visually appealing.
 struct StudentTestCardView: View {
-    let test: Test // Corrected type
+    let test: Test
     var onTakeTest: () -> Void
     
     private var statusColor: Color {
@@ -2392,7 +3466,6 @@ struct StudentTestCardView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            // Top section with title and teacher info
             VStack(alignment: .leading, spacing: 12) {
                 VStack(alignment: .leading) {
                     Text(test.title).font(.system(size: 22, weight: .bold)).lineLimit(1)
@@ -2412,10 +3485,8 @@ struct StudentTestCardView: View {
                 }
             }
             
-            // Middle section with the new "+" cross layout
             TestDetailsCrossLayout(test: test)
             
-            // Bottom section with status badges and action button
             VStack(spacing: 15) {
                 HStack {
                     TestCardBadge(text: test.status, color: statusColor)
@@ -2443,27 +3514,22 @@ struct StudentTestCardView: View {
     }
 }
 
-// MARK: - Helper Views
-// A new helper view for the creative cross layout.
+// MARK: - Helper Views for Card
 fileprivate struct TestDetailsCrossLayout: View {
-    let test: Test // Corrected type
+    let test: Test
 
     var body: some View {
         ZStack {
-            // Vertical divider line with a subtle shadow for depth.
             Rectangle()
                 .fill(Color.gray.opacity(0.15))
                 .frame(width: 1)
                 .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
 
-            // Horizontal divider line with a subtle shadow.
             Rectangle()
                 .fill(Color.gray.opacity(0.15))
                 .frame(height: 1)
                 .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
 
-            // Arrange the four info rows in a 2x2 grid structure
-            // that visually appears to be around the cross.
             VStack(spacing: 20) {
                 HStack(spacing: 20) {
                     TestCardInfoRow(icon: "book.closed.fill", text: test.className, color: .quizifyPrimary)
@@ -2474,7 +3540,7 @@ fileprivate struct TestDetailsCrossLayout: View {
                 HStack(spacing: 20) {
                     TestCardInfoRow(icon: "calendar", text: test.date, color: .quizifyAccentBlue)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    TestCardInfoRow(icon: "clock.fill", text: test.time, color: .quizifyAccentGreen)
+                    TestCardInfoRow(icon: "number.circle.fill", text: "\(test.questions) Questions", color: .quizifyAccentGreen)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
