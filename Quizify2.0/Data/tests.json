@@ -1,0 +1,110 @@
+{
+  "upcoming": [
+    {
+      "id": 1,
+      "title": "Chemistry: Periodic Table",
+      "subject": "Chemistry",
+      "className": "Chemistry 101",
+      "teacher": "Sarah Williams",
+      "teacherAvatar": "https://i.pravatar.cc/150?img=1",
+      "classId": 1,
+      "date": "May 7, 2024",
+      "time": "10:00 AM",
+      "duration": "45 min",
+      "questions": 20,
+      "status": "Upcoming"
+    },
+    {
+      "id": 2,
+      "title": "World War II: Major Events",
+      "subject": "History",
+      "className": "World History",
+      "teacher": "Michael Chen",
+      "teacherAvatar": "https://i.pravatar.cc/150?img=2",
+      "classId": 2,
+      "date": "May 8, 2024",
+      "time": "2:30 PM",
+      "duration": "60 min",
+      "questions": 25,
+      "status": "Upcoming"
+    },
+    {
+      "id": 3,
+      "title": "Calculus: Derivatives",
+      "subject": "Mathematics",
+      "className": "Advanced Math",
+      "teacher": "Robert Johnson",
+      "teacherAvatar": "https://i.pravatar.cc/150?img=3",
+      "classId": 3,
+      "date": "May 10, 2024",
+      "time": "9:15 AM",
+      "duration": "75 min",
+      "questions": 15,
+      "status": "Upcoming"
+    }
+  ],
+  "completed": [
+    {
+      "id": 4,
+      "title": "Cell Structure and Function",
+      "subject": "Biology",
+      "className": "Biology",
+      "teacher": "Emily Parker",
+      "teacherAvatar": "https://i.pravatar.cc/150?img=4",
+      "classId": 4,
+      "date": "April 28, 2024",
+      "time": "11:00 AM",
+      "duration": "60 min",
+      "questions": 30,
+      "status": "Completed",
+      "score": 92
+    },
+    {
+      "id": 5,
+      "title": "Forces and Motion",
+      "subject": "Physics",
+      "className": "Introduction to Physics",
+      "teacher": "David Wilson",
+      "teacherAvatar": "https://i.pravatar.cc/150?img=5",
+      "classId": 5,
+      "date": "April 25, 2024",
+      "time": "1:45 PM",
+      "duration": "45 min",
+      "questions": 20,
+      "status": "Completed",
+      "score": 88
+    },
+    {
+      "id": 6,
+      "title": "Shakespeare: Romeo and Juliet",
+      "subject": "English",
+      "className": "English Literature",
+      "teacher": "Jessica Brown",
+      "teacherAvatar": "https://i.pravatar.cc/150?img=6",
+      "classId": 6,
+      "date": "April 20, 2024",
+      "time": "10:30 AM",
+      "duration": "60 min",
+      "questions": 25,
+      "status": "Completed",
+      "score": 95
+    }
+  ],
+  "missed": [
+    {
+      "id": 7,
+      "title": "Chemical Reactions",
+      "subject": "Chemistry",
+      "className": "Chemistry 101",
+      "teacher": "Sarah Williams",
+      "teacherAvatar": "https://i.pravatar.cc/150?img=1",
+      "classId": 1,
+      "date": "April 15, 2024",
+      "time": "9:00 AM",
+      "duration": "45 min",
+      "questions": 15,
+      "status": "Missed"
+    }
+  ]
+  
+}

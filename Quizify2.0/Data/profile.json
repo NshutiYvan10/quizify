@@ -1,0 +1,29 @@
+{
+  "id": "user_123",
+  "name": "John Smith",
+  "email": "john.smith@example.com",
+  "phone": "+1 (555) 123-4567",
+  "address": "San Francisco, CA",
+  "username": "@johnsmith",
+  "grade": "Grade 11",
+  "school": "Northwood High",
+  "avatarUrl": "https://i.pravatar.cc/150?img=7",
+  "totalQuizzes": 35,
+  "quizzesCompleted": 28,
+  "averageScore": 87.5,
+  "badges": ["Top Performer", "Perfect Score", "Quick Learner"],
+  "activeClasses": [
+    { "id": 1, "name": "Chemistry 101", "teacher": "Prof. Sarah Williams", "schedule": "MWF 10:00 AM", "grade": 92, "color": "#5D4ED6" },
+    { "id": 2, "name": "World History", "teacher": "Prof. Michael Chen", "schedule": "TTh 2:30 PM", "grade": 88, "color": "#00B6B6" },
+    { "id": 3, "name": "Advanced Math", "teacher": "Prof. Robert Johnson", "schedule": "MW 2:00 PM", "grade": 75, "color": "#FDBD41" }
+  ],
+  "performance": [
+    { "id": "subj_1", "name": "Chemistry", "score": 92, "testsCompleted": 6, "totalTests": 8, "classAverage": 85 },
+    { "id": "subj_2", "name": "Mathematics", "score": 75, "testsCompleted": 5, "totalTests": 7, "classAverage": 72 },
+    { "id": "subj_3", "name": "Biology", "score": 96, "testsCompleted": 4, "totalTests": 4, "classAverage": 88 }
+  ],
+  "recentTests": [
+    { "id": 101, "title": "Cell Structure and Function", "class": "Biology", "date": "April 28, 2024", "score": 96 },
+    { "id": 102, "title": "Periodic Table", "class": "Chemistry 101", "date": "April 25, 2024", "score": 92 }
+  ]
+}

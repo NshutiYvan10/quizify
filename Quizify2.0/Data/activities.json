@@ -1,0 +1,27 @@
+[
+  {
+    "id": "act_001",
+    "title": "Physics Quiz Completed",
+    "description": "You scored 92% on the Forces and Motion quiz.",
+    "time": "2 hours ago",
+    "icon": "trophy.fill",
+    "iconBgColor": "quizifyAccentGreen"
+  },
+  {
+    "id": "act_002",
+    "title": "Joined Math Class",
+    "description": "You joined Advanced Calculus with Mr. Johnson.",
+    "time": "Yesterday",
+    "icon": "plus.rectangle.fill.on.rectangle.fill",
+    "iconBgColor": "quizifyPrimary"
+  },
+  {
+    "id": "act_003",
+    "title": "Biology Test Scheduled",
+    "description": "New test: Cell Structure and Function.",
+    "time": "2 days ago",
+    "icon": "calendar.badge.plus",
+    "iconBgColor": "quizifyAccentBlue"
+  }
+]
+

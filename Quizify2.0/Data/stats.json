@@ -1,0 +1,47 @@
+[
+  {
+    "id": "stat_classes",
+    "title": "Classes",
+    "value": "5",
+    "description": "Active classes",
+    "icon": "books.vertical.fill",
+    "trend": "+1 this week",
+    "color": "#5D4ED6"
+  },
+  {
+    "id": "stat_tests",
+    "title": "Tests",
+    "value": "12",
+    "description": "Upcoming tests",
+    "icon": "pencil.and.ruler.fill",
+    "trend": "3 due soon",
+    "color": "#00B6B6"
+  },
+  {
+    "id": "stat_results",
+    "title": "Results",
+    "value": "87%",
+    "description": "Average score",
+    "icon": "chart.bar.xaxis",
+    "trend": "+2% from last month",
+    "color": "#22C870"
+  },
+  {
+    "id": "stat_completion",
+    "title": "Completion",
+    "value": "92%",
+    "description": "Course progress",
+    "icon": "hourglass",
+    "trend": "On track for completion",
+    "color": "#FDBD41"
+  },
+  {
+    "id": "stat_streak",
+    "title": "Study Streak",
+    "value": "14",
+    "description": "Days of consistent study",
+    "icon": "flame.fill",
+    "trend": "Keep it up!",
+    "color": "#F97316"
+  }
+]

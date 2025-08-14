@@ -1,0 +1,51 @@
+{
+  "id": 1,
+  "title": "Chemistry: Periodic Table",
+  "subject": "Chemistry",
+  "className": "Chemistry 101",
+  "date": "May 7, 2024",
+  "duration": 45,
+  "questions": [
+    {
+      "id": "q1",
+      "question": "Which element has the chemical symbol 'Na'?",
+      "options": ["Nitrogen", "Sodium", "Neon", "Nickel"],
+      "correctAnswer": "Sodium",
+      "points": 5,
+      "image": ""
+    },
+    {
+      "id": "q2",
+      "question": "Which of the following is a noble gas?",
+      "options": ["Chlorine", "Oxygen", "Argon", "Calcium"],
+      "correctAnswer": "Argon",
+      "points": 5,
+      "image": ""
+    },
+    {
+      "id": "q3",
+      "question": "What is the atomic number of Carbon?",
+      "options": ["4", "6", "8", "12"],
+      "correctAnswer": "6",
+      "points": 5,
+      "image": "https://images.unsplash.com/photo-1582727657635-c771002a65a7?q=80&w=2070&auto=format&fit=crop"
+    },
+    {
+      "id": "q4",
+      "question": "Which element is a liquid at room temperature?",
+      "options": ["Mercury", "Aluminum", "Copper", "Helium"],
+      "correctAnswer": "Mercury",
+      "points": 5,
+      "image": ""
+    },
+    {
+      "id": "q5",
+      "question": "Which group in the periodic table contains the alkali metals?",
+      "options": ["Group 1", "Group 2", "Group 17", "Group 18"],
+      "correctAnswer": "Group 1",
+      "points": 5,
+      "image": ""
+    }
+  ]
+}
+
